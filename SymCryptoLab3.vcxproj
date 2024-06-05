@@ -133,11 +133,9 @@
     <ClCompile Include="ciphrator.hpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mathutils.cpp" />
-    <ClCompile Include="recogniser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mathutils.hpp" />
-    <ClInclude Include="recogniser.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

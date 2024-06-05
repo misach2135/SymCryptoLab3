@@ -6,45 +6,30 @@
 #include "bigramutils.hpp"
 #include "ciphrator.hpp"
 
-std::vector<std::pair<std::string, utils::uintbox>> getMostFrequentBigrams(std::map<std::string, utils::uintbox> bigramsMap, uint64_t bigramsCount,double percent)
-{
-	double bound = percent * bigramsCount;
-	std::vector<std::pair<std::string, utils::uintbox>> res;
-	for (const auto& e : bigramsMap)
-	{
-		if (e.second.val >= bound)
-		{
-			res.push_back(e);
-		}
-	}
-
-	std::sort(res.begin(), res.end(), [](std::pair<std::string, utils::uintbox> p1, std::pair<std::string, utils::uintbox> p2) {
-		return p1.second > p2.second;
-	});
-
-	return res;
-}
-
 int main()
 {
 	using namespace utils;
 
-	auto variantTextInfo = TextInfoFromFileWithoutSpaces("08.txt");
-	auto naturalTextInfo = TextInfoFromFileWithoutSpaces("text.txt");
+	std::string text = ParseText("08.txt");
+	std::string textNatural = ParseText("text3.txt");
+	std::ofstream out("out.txt");
 
-	auto vecVariant = getMostFrequentBigrams(variantTextInfo.nonOverlappingBigramsCount,variantTextInfo.nonOverlappingBigramsSize, 0.0065);
-	auto vecNatural = getMostFrequentBigrams(naturalTextInfo.nonOverlappingBigramsCount, naturalTextInfo.nonOverlappingBigramsSize, 0.01);
+	auto textInfo = TextInfoFromFileWithoutSpaces("text1.txt");
+	auto mostFrequentBigrams = getMostFrequentBigrams(textInfo.nonOverlappingBigramsCount, 5);
 
-	std::string bigram = "приветандрейнучтотикактичтоделал";
+	std::vector<std::string> bigrams;
 
-	auto temp = ciphrator::encrypt(bigram, 10, 5);
+	for (int i = 0; i < mostFrequentBigrams.size(); i++)
+	{
+		bigrams.push_back(mostFrequentBigrams[i].first);
+	}
 
-	std::cout << bigram << std::endl;
-	std::cout << temp << std::endl;
+	//std::cout << ciphrator::decrypt(text, 558, 586) << std::endl;
 
-	temp = ciphrator::decrypt(temp, 10, 5);
+	auto temp = ciphrator::decrypt(ciphrator::encrypt(textNatural, 60, 1), 60, 1);
 
-	std::cout << temp << std::endl;
+	ciphrator::hack(text, {"ст", "но", "то", "на", "ен"}, out);
+	//std::cout << ciphrator::isNaturalLang(textNatural, 0.3) << std::endl;
 
 	std::cout << std::endl;
 	return 0;

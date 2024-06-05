@@ -27,9 +27,6 @@
     <ClCompile Include="bigramutils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="recogniser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ciphrator.hpp">
       <Filter>Header Files</Filter>
     </ClCompile>
@@ -39,9 +36,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mathutils.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="recogniser.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

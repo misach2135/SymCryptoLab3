@@ -46,11 +46,16 @@ namespace utils
 	double CalcNonOverlappingBigramEntropy(std::map<std::string, uintbox> nonOverlappingBigramsCount, uint64_t textSize);
 
 	TextInfo TextInfoFromFileWithoutSpaces(std::string filename);
+	TextInfo TextInfoFromStringWithoutSpaces(const std::string& text);
+
+	std::string ParseText(const std::string& filename);
+
+	std::vector<std::pair<std::string, utils::uintbox>> getMostFrequentBigrams(std::map<std::string, utils::uintbox> bigramsMap, int count);
 
 	// And from now completly new code)
 
 	const int32_t M = 31;
-	const std::array<char, 31> alphabet = { 'а','б','в','г','д','е','ж','з','и','й','к','л','м','н','о','п','р','с','т','у','ф','х','ц','ч','ш','щ','ы','ь','э','ю','я' };
+	const std::array<char, 31> alphabet = { 'а','б','в','г','д','е','ж','з','и','й','к','л','м','н','о','п','р','с','т','у','ф','х','ц','ч','ш','щ','ь','ы','э','ю','я' };
 
 	bool checkBigramCorrectness(const std::string& bigram);
 	int32_t bigramToNum(const std::string& bigram);

@@ -1,5 +1,7 @@
 ﻿#include "bigramutils.hpp"
 
+#include <algorithm>
+
 bool utils::isCharCyrrillic(char c)
 {
 	return (c >= (char)192) && (c <= (char)255);
@@ -109,6 +111,86 @@ utils::TextInfo utils::TextInfoFromFileWithoutSpaces(std::string filename)
 	std::cout << "Done!" << std::endl;
 
 	return info;
+}
+
+utils::TextInfo utils::TextInfoFromStringWithoutSpaces(const std::string& text)
+{
+	utils::TextInfo info;
+	info.textSize = 0;
+	std::stringstream ss(text);
+	char c = 0;
+	ss >> std::skipws;
+
+	while (ss.get(c))
+	{
+		info.symbolsCount[c].val++;
+		char next = ss.peek();
+		if (!ss.eof())
+		{
+			std::string bigram{ c, next };
+
+			info.overlappingBigramsCount[bigram].val++;
+			info.overlappingBigramsSize++;
+
+			if (info.textSize % 2 == 0)
+			{
+				info.nonOverlappingBigramsCount[bigram].val++;
+				info.nonOverlappingBigramsSize++;
+			}
+		}
+		info.textSize++;
+	}
+
+	info.symbolsEntropy = CalcLetterEntropy(info.symbolsCount, info.textSize);
+	info.nonOverlappingBigramsEntropy = CalcNonOverlappingBigramEntropy(info.nonOverlappingBigramsCount, info.textSize);
+	info.overlappingBigramsEntropy = CalcOverlappingBigramEntropy(info.overlappingBigramsCount, info.textSize);
+
+
+	return info;
+}
+
+std::string utils::ParseText(const std::string& filename)
+{
+	std::setlocale(LC_ALL, "ru-Ru");
+	SetConsoleOutputCP(1251);
+	SetConsoleCP(1251);
+	std::ifstream in(filename);
+
+	if (!in.is_open()) return "";
+
+	std::stringstream ss;
+	in >> std::skipws;
+	char c = 0;
+	while (in.get(c))
+	{
+		if ((isCharCyrrillic(c) && !isspace(c) && (c != 10)))
+		{
+			c = tolower(c);
+			ss << c;
+			// std::cout << c;
+		}
+	}
+
+	return ss.str();
+
+}
+
+std::vector<std::pair<std::string, utils::uintbox>> utils::getMostFrequentBigrams(std::map<std::string, utils::uintbox> bigramsMap, int count)
+{
+	std::vector<std::pair<std::string, utils::uintbox>> res;
+	for (const auto& e : bigramsMap)
+	{
+		res.push_back(e);
+	}
+
+	std::sort(res.begin(), res.end(), [](std::pair<std::string, utils::uintbox> p1, std::pair<std::string, utils::uintbox> p2) {
+		return p1.second > p2.second;
+		});
+
+	if (count > res.size()) throw new std::exception("Too large count!");
+	res.erase(res.begin() + count, res.end());
+
+	return res;
 }
 
 bool utils::checkBigramCorrectness(const std::string& bigram)
